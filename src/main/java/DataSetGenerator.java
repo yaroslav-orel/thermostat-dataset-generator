@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 public class DataSetGenerator {
 
     private static final String CSV_FILE_PATH = "weatherHistory.csv";
-    private static final DateTimeFormatter formatter = ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z");
+    private static final DateTimeFormatter FORMATTER = ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z");
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -34,7 +34,7 @@ public class DataSetGenerator {
 
     private static DataSetRow toDataSetRow(CSVRecord record){
         return new DataSetRow(
-                LocalDateTime.parse(record.get(0), formatter),
+                LocalDateTime.parse(record.get(0), FORMATTER),
                 Double.parseDouble(record.get(3))
                 );
     }

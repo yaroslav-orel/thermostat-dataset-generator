@@ -7,10 +7,12 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static com.google.common.collect.Streams.stream;
+import static java.lang.Double.parseDouble;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.toList;
 
@@ -18,6 +20,7 @@ public class DataSetGenerator {
 
     private static final String CSV_FILE_PATH = "weatherHistory.csv";
     private static final DateTimeFormatter FORMATTER = ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z");
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -36,7 +39,7 @@ public class DataSetGenerator {
 
     private static DataSetRow toDataSetRow(CSVRecord record){
         val timestamp = LocalDateTime.parse(record.get(0), FORMATTER);
-        val outdoorTemp = Double.parseDouble(record.get(3));
+        val outdoorTemp = parseDouble(DECIMAL_FORMAT.format(parseDouble(record.get(3))));
         val indoorTemp = chooseIndoorTemp(timestamp, outdoorTemp);
 
         return new DataSetRow(timestamp, outdoorTemp, indoorTemp);

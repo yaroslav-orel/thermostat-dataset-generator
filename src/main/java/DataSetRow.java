@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 public class DataSetRow {
     final LocalDateTime timestamp;
     final Double outdoorTemp;
-    Double indoorTemp;
+    final Double indoorTemp;
     Double energyConsumption;
 }

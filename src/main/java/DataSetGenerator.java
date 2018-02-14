@@ -30,12 +30,27 @@ public class DataSetGenerator {
         val dataSet = stream(csvParser)
                 .map(DataSetGenerator::toDataSetRow)
                 .collect(toList());
+
+        dataSet.stream().forEach(System.out::println);
     }
 
     private static DataSetRow toDataSetRow(CSVRecord record){
-        return new DataSetRow(
-                LocalDateTime.parse(record.get(0), FORMATTER),
-                Double.parseDouble(record.get(3))
-                );
+        val timestamp = LocalDateTime.parse(record.get(0), FORMATTER);
+        val outdoorTemp = Double.parseDouble(record.get(3));
+        val indoorTemp = chooseIndoorTemp(timestamp, outdoorTemp);
+
+        return new DataSetRow(timestamp, outdoorTemp, indoorTemp);
+    }
+
+    private static boolean isHome(LocalDateTime timestamp){
+        int hour = timestamp.getHour();
+        return !(hour > 9 && hour < 19);
+    }
+
+    private static Double chooseIndoorTemp(LocalDateTime timestamp, Double outdoorTemp){
+        Double indoorTemp = isHome(timestamp) ? 23D : 10D;
+        if(outdoorTemp > indoorTemp) indoorTemp = outdoorTemp;
+
+        return indoorTemp;
     }
 }

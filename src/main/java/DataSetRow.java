@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class DataSetRow {
     final LocalDateTime timestamp;
-    final Double outdoorTemperature;
-    Double indoorTemperature;
+    final Double outdoorTemp;
+    Double indoorTemp;
     Double energyConsumption;
 }

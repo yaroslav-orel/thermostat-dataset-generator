@@ -54,9 +54,15 @@ public class CSVHelper {
 
     private static List<String> toDataSetRow(CSVRecord record){
         val timestamp = LocalDateTime.parse(record.get(0), FORMATTER);
-        val outdoorTemp = DECIMAL_FORMAT.format(parseDouble(record.get(3)));
-        val indoorTemp = DecisionHelper.chooseIndoorTemp(timestamp, parseDouble(outdoorTemp));
+        val outdoorTemp = Double.parseDouble(DECIMAL_FORMAT.format(parseDouble(record.get(3))));
+        val indoorTemp = DecisionHelper.chooseIndoorTemp(timestamp, outdoorTemp);
+        val energyConsumption = DecisionHelper.calculateEnergyConsumption(outdoorTemp, indoorTemp);
 
-        return asList(timestamp.toString(), outdoorTemp, Double.toString(indoorTemp), "null");
+        return asList(
+                timestamp.toString(),
+                Double.toString(outdoorTemp),
+                Double.toString(indoorTemp),
+                Double.toString(energyConsumption)
+        );
     }
 }

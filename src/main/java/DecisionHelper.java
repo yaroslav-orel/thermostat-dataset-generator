@@ -13,4 +13,8 @@ public class DecisionHelper {
 
         return indoorTemp;
     }
+
+    public static Double calculateEnergyConsumption(Double outdoorTemp, Double indoorTemp) {
+        return Math.abs(indoorTemp - outdoorTemp) * 0.75;
+    }
 }

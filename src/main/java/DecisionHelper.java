@@ -1,3 +1,4 @@
+import lombok.experimental.var;
 import lombok.val;
 
 import java.time.LocalDateTime;
@@ -8,26 +9,55 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 
 public class DecisionHelper {
 
-    public static boolean isSomeoneHome(LocalDateTime timestamp){
-        val dayOfWeek = timestamp.getDayOfWeek();
-        if(dayOfWeek.equals(SATURDAY) || dayOfWeek.equals(SUNDAY))
-            return true;
-        else {
-            int hour = timestamp.getHour();
-            return !(hour > 9 && hour < 19);
+    public static Double chooseIndoorTemp(DateTemp dateTemp) {
+        var desiredTemp = getDesiredTemp(dateTemp.getDate());
+
+        if (dateTemp.getOutdoorTemp() >= desiredTemp)
+            desiredTemp = dateTemp.getOutdoorTemp() + current().nextInt(2, 5);
+
+        return desiredTemp;
+    }
+
+    public static Double getDesiredTemp(LocalDateTime date) {
+        if (date.getDayOfWeek().equals(SATURDAY) || date.getDayOfWeek().equals(SUNDAY))
+            return 23D;
+
+        switch (getDayPeriod(date)) {
+            case NIGHT:
+                return 20D;
+            case MORNING:
+                return 20D + current().nextInt(0, 3);
+            case WORKING_HOURS:
+                return 10D;
+            default:
+                return 23D;
         }
     }
 
-    public static Double chooseIndoorTemp(Double outdoorTemp, boolean isSomeoneHome){
-        Double indoorTemp = isSomeoneHome ? 23D : 10D;
-        if(outdoorTemp >= indoorTemp)
-            indoorTemp = outdoorTemp + current().nextInt(2, 5);
+    //TODO Figure out the way to calculate this correctly
+    public static Double calculateEnergyConsumption(Double outdoorTemp, Double indoorTemp) {
+        val difference = Math.abs(indoorTemp - outdoorTemp);
 
-        return indoorTemp;
+        if (difference < 1)
+            return 0.1D;
+        else if (difference >= 1 && difference < 3)
+            return difference * 0.50;
+        if (difference >= 3 && difference < 5)
+            return difference * 0.75;
+        else
+            return difference * 0.85;
     }
 
-    public static Double calculateEnergyConsumption(Double outdoorTemp, Double indoorTemp, boolean isSomeoneHome) {
-        if (isSomeoneHome) return Math.abs(indoorTemp - outdoorTemp) * 0.75;
-        else return 0D;
+    public static DayPeriod getDayPeriod(LocalDateTime date) {
+        val dayHour = date.getHour();
+
+        if (dayHour < 6)
+            return DayPeriod.NIGHT;
+        if (dayHour >= 6 && dayHour < 10)
+            return DayPeriod.MORNING;
+        if (dayHour >= 10 && dayHour <= 19)
+            return DayPeriod.WORKING_HOURS;
+
+        return DayPeriod.EVENING;
     }
 }

@@ -1,13 +1,10 @@
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.apache.commons.csv.CSVRecord;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.google.common.collect.Streams.stream;
-import static java.lang.Double.parseDouble;
 import static java.util.Arrays.asList;
 
 public class DataSetGeneratorApplication {
@@ -32,9 +29,8 @@ public class DataSetGeneratorApplication {
     }
 
     public static List<String> toDataSetRow(DateTemp dateTemp){
-        val isSomeoneHome = DecisionHelper.isSomeoneHome(dateTemp.getDate());
-        val indoorTemp = DecisionHelper.chooseIndoorTemp(dateTemp.getOutdoorTemp(), isSomeoneHome);
-        val energyConsumption = DecisionHelper.calculateEnergyConsumption(dateTemp.getOutdoorTemp(), indoorTemp, isSomeoneHome);
+        val indoorTemp = DecisionHelper.chooseIndoorTemp(dateTemp);
+        val energyConsumption = DecisionHelper.calculateEnergyConsumption(dateTemp.getOutdoorTemp(), indoorTemp);
 
         return asList(
                 dateTemp.getDate().toString(),

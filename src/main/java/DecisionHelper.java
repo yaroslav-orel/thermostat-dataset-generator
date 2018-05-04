@@ -13,7 +13,7 @@ public class DecisionHelper {
         var desiredTemp = getDesiredTemp(dateTemp.getDate());
 
         if (dateTemp.getOutdoorTemp() >= desiredTemp)
-            desiredTemp = dateTemp.getOutdoorTemp() + current().nextInt(2, 5);
+            desiredTemp = dateTemp.getOutdoorTemp() + current().nextDouble(1, 3);
 
         return desiredTemp;
     }
@@ -26,7 +26,7 @@ public class DecisionHelper {
             case NIGHT:
                 return 20D;
             case MORNING:
-                return 20D + current().nextInt(0, 3);
+                return 20D + current().nextDouble(1, 3);
             case WORKING_HOURS:
                 return 10D;
             default:

@@ -46,9 +46,9 @@ public class DataSetGeneratorApplication {
 
         return asList(
                 dateTemp.getDate().toString(),
-                Double.toString(dateTemp.getOutdoorTemp()),
-                Double.toString(indoorTemp),
-                Double.toString(energyConsumption)
+                truncateDouble(dateTemp.getOutdoorTemp()),
+                truncateDouble(indoorTemp),
+                truncateDouble(energyConsumption)
         );
     }
 
@@ -66,13 +66,17 @@ public class DataSetGeneratorApplication {
             val smoothedTemp = prevIndoorTemp > curIndoorTemp ?
                     prevIndoorTemp - (difference / 2D) :
                     prevIndoorTemp + (difference / 2D);
-            current.set(2, Double.toString(smoothedTemp));
+            current.set(2, truncateDouble(smoothedTemp));
 
-            System.out.println(format("Smoothed indoor temp on date %s from %s to %s because previous one was %s",
+            System.out.println(format("Smoothed indoor temp on date %s from %.1f to %.1f because previous one was %.1f",
                     current.get(0),
                     curIndoorTemp,
                     smoothedTemp,
                     prevIndoorTemp));
         }
+    }
+
+    private static String truncateDouble(double val) {
+        return String.format("%.1f", val);
     }
 }

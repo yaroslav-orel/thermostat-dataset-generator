@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
 public class DataSetGeneratorApplication {
 
     private static final String INPUT_CSV_FILE_NAME = "weatherHistory.csv";
-    private static final String OUTPUT_CSV_FILE_NAME = "dataset2.csv";
+    private static final String OUTPUT_CSV_FILE_NAME = "dataset3.csv";
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -62,7 +62,7 @@ public class DataSetGeneratorApplication {
         val curIndoorTemp = Double.parseDouble(current.get(2));
         val difference = Math.abs(prevIndoorTemp - curIndoorTemp);
 
-        if (difference > 5) {
+        if (difference >= 6) {
             val smoothedTemp = prevIndoorTemp > curIndoorTemp ?
                     prevIndoorTemp - (difference / 2D) :
                     prevIndoorTemp + (difference / 2D);

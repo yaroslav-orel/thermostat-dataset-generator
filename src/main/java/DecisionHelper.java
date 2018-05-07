@@ -55,7 +55,7 @@ public class DecisionHelper {
             return DayPeriod.NIGHT;
         if (dayHour >= 6 && dayHour < 10)
             return DayPeriod.MORNING;
-        if (dayHour >= 10 && dayHour <= 19)
+        if (dayHour >= 10 && dayHour < 19)
             return DayPeriod.WORKING_HOURS;
 
         return DayPeriod.EVENING;
